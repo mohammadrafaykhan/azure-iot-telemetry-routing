@@ -1,0 +1,6 @@
+-r functions/requirements.txt
+-r device/requirements.txt
+-r service/requirements.txt
+pytest>=8,<10
+pytest-asyncio>=1,<2
+ruff>=0.8,<1

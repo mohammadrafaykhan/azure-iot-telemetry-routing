@@ -1,0 +1,6 @@
+azure-core>=1.41,<2
+azure-identity>=1.27,<2
+azure-data-tables>=12.7,<13
+azure-storage-blob>=12.31,<13
+cryptography>=44,<51
+python-dotenv>=1.0,<2

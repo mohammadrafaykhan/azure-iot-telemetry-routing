@@ -1,0 +1,25 @@
+# Secrets and identities — never commit
+.env
+certs/
+*.pem
+*.key
+functions/local.settings.json
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# Deployment packages
+*.zip
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

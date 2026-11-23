@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 960" font-family="Segoe UI, system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="mTeal" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#038387"/></marker>
+    <marker id="mBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#0078D4"/></marker>
+    <marker id="mPurple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#8764B8"/></marker>
+    <marker id="mOrange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#CA5010"/></marker>
+    <marker id="mGold" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#B58900"/></marker>
+    <style>
+      .zl{font-size:13px;font-weight:700;letter-spacing:.5px;fill:#323130}
+      .zs{font-size:11.5px;fill:#605E5C}
+      .h{font-size:14px;font-weight:700;fill:#201F1E}
+      .hs{font-size:12.5px;font-weight:700;fill:#201F1E}
+      .s{font-size:11.5px;fill:#605E5C}
+      .m{font-size:11px;fill:#605E5C;font-family:Consolas, 'Cascadia Mono', monospace}
+      .n{font-size:12px;font-weight:700;fill:#fff}
+      .lg{font-size:12.5px;fill:#323130}
+      .teal{stroke:#038387;stroke-width:1.8;fill:none}
+      .blue{stroke:#0078D4;stroke-width:1.8;fill:none}
+      .purple{stroke:#8764B8;stroke-width:1.8;fill:none}
+      .orange{stroke:#CA5010;stroke-width:1.9;fill:none}
+      .gold{stroke:#B58900;stroke-width:1.7;fill:none;stroke-dasharray:6 4}
+    </style>
+  </defs>
+
+  <rect width="1240" height="960" fill="#ffffff"/>
+  <text x="40" y="38" font-size="26" font-weight="700" fill="#201F1E">Telemetry routing and alerting &#8212; architecture</text>
+  <text x="40" y="62" font-size="14" fill="#605E5C">IoT Hub routes telemetry and twin changes to Event Hubs; a serverless pipeline archives it, raises alerts, and tracks presence. Entra ID end to end.</text>
+
+  <!-- zones -->
+  <rect x="30" y="95" width="270" height="670" rx="12" fill="#E9F6F6" stroke="#038387" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="48" y="119" class="zl">DEVICES</text>
+  <rect x="325" y="95" width="660" height="670" rx="12" fill="#FAF9F8" stroke="#605E5C" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="343" y="119" class="zl">AZURE</text>
+  <text x="403" y="119" class="zs">rg-iot-telemetry-dev &#183; Bicep</text>
+  <rect x="1010" y="95" width="200" height="670" rx="12" fill="#EFF6FC" stroke="#2B88D8" stroke-width="1.6" stroke-dasharray="7 5"/>
+  <text x="1028" y="119" class="zl">OPERATOR</text>
+
+  <!-- presses -->
+  <rect x="45" y="150" width="240" height="390" rx="8" fill="#fff" stroke="#038387" stroke-width="1.6"/>
+  <rect x="45" y="150" width="240" height="6" rx="3" fill="#038387"/>
+  <text x="60" y="180" class="h">Press simulator</text>
+  <rect x="216" y="164" width="56" height="22" rx="4" fill="#FFF4CE" stroke="#D9A300"/>
+  <text x="244" y="179" text-anchor="middle" class="s" font-weight="700">X.509</text>
+  <text x="60" y="212" class="hs">identity</text>
+  <text x="60" y="228" class="s">self-signed &#183; thumbprint pinned in hub</text>
+  <text x="60" y="260" class="hs">telemetry</text>
+  <text x="60" y="276" class="s">schema 1.0 &#183; every 60 s by default</text>
+  <text x="60" y="308" class="hs">twin</text>
+  <text x="60" y="324" class="s">desired interval &#183; Plug and Play ack</text>
+  <text x="60" y="356" class="hs">method</text>
+  <text x="60" y="372" class="s">CompleteMaintenance resets wear</text>
+  <text x="60" y="404" class="hs">--degrade</text>
+  <text x="60" y="420" class="s">wears fast to trip the alert rules</text>
+  <text x="60" y="452" class="hs">resilience</text>
+  <text x="60" y="468" class="s">backoff grows while sessions fail</text>
+  <text x="60" y="484" class="s">never gives up; the cloud reports</text>
+  <text x="60" y="500" class="s">the gap as offline or silent</text>
+
+  <!-- IoT Hub -->
+  <rect x="345" y="150" width="290" height="265" rx="8" fill="#fff" stroke="#323130" stroke-width="1.8"/>
+  <rect x="345" y="150" width="6" height="265" rx="3" fill="#323130"/>
+  <text x="490" y="178" text-anchor="middle" class="h">Azure IoT Hub (F1)</text>
+  <text x="362" y="206" class="hs">Identity</text><text x="432" y="206" class="s">managed (system) &#183; device SAS off</text>
+  <text x="362" y="238" class="hs">Route: telemetry</text>
+  <text x="362" y="254" class="m">$body.schemaVersion = '1.0'</text>
+  <text x="362" y="285" class="hs">Route: twin-reported</text>
+  <text x="362" y="301" class="m">IS_OBJECT($body.properties.reported)</text>
+  <text x="362" y="332" class="hs">Enrichments</text>
+  <text x="362" y="348" class="s">site and line from the device twin tags</text>
+  <text x="362" y="379" class="hs">Fallback</text>
+  <text x="362" y="395" class="s">anything unmatched &#8594; built-in endpoint</text>
+
+  <!-- Event Hubs -->
+  <rect x="670" y="150" width="295" height="90" rx="8" fill="#fff" stroke="#0078D4" stroke-width="1.6"/>
+  <rect x="670" y="150" width="6" height="90" rx="3" fill="#0078D4"/>
+  <text x="817" y="178" text-anchor="middle" class="h">Event Hubs (Basic)</text>
+  <text x="690" y="202" class="s">hub telemetry &#183; 2 partitions &#183; 1-day retention</text>
+  <text x="690" y="222" class="s">local auth off &#183; Entra ID only</text>
+
+  <!-- Function app -->
+  <rect x="670" y="280" width="295" height="270" rx="8" fill="#fff" stroke="#8764B8" stroke-width="1.8"/>
+  <rect x="670" y="280" width="6" height="270" rx="3" fill="#8764B8"/>
+  <text x="817" y="308" text-anchor="middle" class="h">Function app (Flex Consumption)</text>
+  <text x="690" y="338" class="hs">stream</text><text x="752" y="338" class="s">Event Hubs trigger &#183; batches</text>
+  <text x="690" y="354" class="s">archive &#8594; alert rules &#8594; last seen &#183; retries</text>
+  <text x="690" y="386" class="hs">connectivity</text><text x="785" y="386" class="s">Event Grid trigger</text>
+  <text x="690" y="402" class="s">ordered by sequence number</text>
+  <text x="690" y="434" class="hs">presence</text><text x="760" y="434" class="s">timer, every minute</text>
+  <text x="690" y="450" class="s">offline after 2 min &#183; silent after 3 intervals</text>
+  <text x="690" y="482" class="hs">rules</text><text x="738" y="482" class="s">vibration (ISO 10816 zones)</text>
+  <text x="690" y="498" class="s">temperature &#183; debounce + hysteresis</text>
+  <text x="690" y="530" class="s">idempotent: replays never duplicate alerts</text>
+
+  <!-- Event Grid -->
+  <rect x="345" y="450" width="290" height="85" rx="8" fill="#fff" stroke="#CA5010" stroke-width="1.6"/>
+  <rect x="345" y="450" width="6" height="85" rx="3" fill="#CA5010"/>
+  <text x="490" y="477" text-anchor="middle" class="h">Event Grid system topic</text>
+  <text x="362" y="500" class="s">DeviceConnected &#183; DeviceDisconnected</text>
+  <text x="362" y="520" class="s">pushed to the connectivity function</text>
+
+  <!-- Monitoring -->
+  <rect x="345" y="575" width="290" height="115" rx="8" fill="#fff" stroke="#B58900" stroke-width="1.6"/>
+  <rect x="345" y="575" width="6" height="115" rx="3" fill="#B58900"/>
+  <text x="490" y="602" text-anchor="middle" class="h">Application Insights + Monitor</text>
+  <text x="362" y="626" class="s">"ALERT &#8230;" traces &#183; Entra ID ingestion</text>
+  <text x="362" y="646" class="s">log alert rule, evaluated every 5 min</text>
+  <text x="362" y="666" class="s">action group &#8594; email</text>
+
+  <!-- Storage -->
+  <rect x="670" y="590" width="295" height="100" rx="8" fill="#fff" stroke="#8764B8" stroke-width="1.6"/>
+  <rect x="670" y="590" width="6" height="100" rx="3" fill="#8764B8"/>
+  <text x="817" y="617" text-anchor="middle" class="h">Storage (shared key off)</text>
+  <text x="690" y="641" class="s">Blob: archive/raw/yyyy/mm/dd/hh/*.jsonl</text>
+  <text x="690" y="661" class="s">Tables: alerts &#183; alertstate &#183; presence</text>
+
+  <!-- operator -->
+  <rect x="1025" y="150" width="170" height="490" rx="8" fill="#fff" stroke="#0078D4" stroke-width="1.6"/>
+  <rect x="1025" y="150" width="170" height="6" rx="3" fill="#0078D4"/>
+  <text x="1040" y="180" class="h">opsctl</text>
+  <rect x="1110" y="164" width="72" height="22" rx="4" fill="#EFF6FC" stroke="#0078D4"/>
+  <text x="1146" y="179" text-anchor="middle" class="s" font-weight="700">Entra ID</text>
+  <text x="1040" y="214" class="hs">devices add</text>
+  <text x="1040" y="230" class="s">certificate + register</text>
+  <text x="1040" y="262" class="hs">devices list</text>
+  <text x="1040" y="278" class="s">state + presence</text>
+  <text x="1040" y="310" class="hs">interval</text>
+  <text x="1040" y="326" class="s">desired, per device</text>
+  <text x="1040" y="358" class="hs">maintain</text>
+  <text x="1040" y="374" class="s">direct method</text>
+  <text x="1040" y="406" class="hs">alerts &#183; active</text>
+  <text x="1040" y="422" class="s">history and held alerts</text>
+  <text x="1040" y="454" class="hs">archive</text>
+  <text x="1040" y="470" class="s">latest raw records</text>
+  <text x="1040" y="610" class="s" fill="#0078D4" font-weight="700">reads Storage &#8594;</text>
+
+  <rect x="1025" y="665" width="170" height="75" rx="8" fill="#fff" stroke="#B58900" stroke-width="1.6"/>
+  <text x="1040" y="693" class="h">Email</text>
+  <text x="1040" y="715" class="s">alert raised or escalated</text>
+
+  <!-- 1: devices <-> hub -->
+  <line x1="285" y1="210" x2="343" y2="210" class="teal" marker-end="url(#mTeal)"/>
+  <circle cx="314" cy="194" r="11" fill="#038387"/><text x="314" y="198" text-anchor="middle" class="n">1</text>
+  <line x1="345" y1="250" x2="287" y2="250" class="teal" stroke-dasharray="6 4" marker-end="url(#mTeal)"/>
+
+  <!-- 2: hub -> event hubs -->
+  <line x1="635" y1="195" x2="668" y2="195" class="blue" marker-end="url(#mBlue)"/>
+  <circle cx="652" cy="176" r="11" fill="#0078D4"/><text x="652" y="180" text-anchor="middle" class="n">2</text>
+
+  <!-- 3: event hubs -> function -->
+  <line x1="817" y1="240" x2="817" y2="278" class="blue" marker-end="url(#mBlue)"/>
+  <circle cx="838" cy="259" r="11" fill="#0078D4"/><text x="838" y="263" text-anchor="middle" class="n">3</text>
+
+  <!-- 4: function -> storage -->
+  <line x1="817" y1="550" x2="817" y2="588" class="purple" marker-end="url(#mPurple)"/>
+  <circle cx="838" cy="569" r="11" fill="#8764B8"/><text x="838" y="573" text-anchor="middle" class="n">4</text>
+
+  <!-- 5: hub -> event grid -> function -->
+  <line x1="490" y1="415" x2="490" y2="448" class="orange" marker-end="url(#mOrange)"/>
+  <line x1="635" y1="492" x2="668" y2="492" class="orange" marker-end="url(#mOrange)"/>
+  <circle cx="512" cy="432" r="11" fill="#CA5010"/><text x="512" y="436" text-anchor="middle" class="n">5</text>
+
+  <!-- 6: function -> monitoring -> email -->
+  <path d="M670 535 L652 535 L652 632 L637 632" class="gold" marker-end="url(#mGold)"/>
+  <path d="M490 690 L490 724 L1023 724" class="gold" marker-end="url(#mGold)"/>
+  <circle cx="652" cy="585" r="11" fill="#B58900"/><text x="652" y="589" text-anchor="middle" class="n">6</text>
+
+  <!-- operator connections -->
+  <path d="M1025 200 L995 200 L995 135 L490 135 L490 148" class="blue" marker-end="url(#mBlue)"/>
+  <text x="742" y="131" text-anchor="middle" class="s" fill="#0078D4" font-weight="700">IoT Hub REST (devices, twins, methods)</text>
+  <line x1="1025" y1="630" x2="967" y2="630" class="blue" marker-end="url(#mBlue)"/>
+
+  <!-- legend -->
+  <rect x="30" y="782" width="1180" height="168" rx="10" fill="#FAF9F8" stroke="#E1DFDD"/>
+  <circle cx="58" cy="808" r="10" fill="#038387"/><text x="58" y="812" text-anchor="middle" class="n">1</text>
+  <text x="76" y="812" class="lg">Presses send schema 1.0 telemetry over MQTT/TLS with self-signed X.509 identities; the hub sends twin changes and the maintenance method back.</text>
+  <circle cx="58" cy="832" r="10" fill="#0078D4"/><text x="58" y="836" text-anchor="middle" class="n">2</text>
+  <text x="76" y="836" class="lg">IoT Hub routes telemetry and reported-twin changes to Event Hubs as its managed identity, enriched with the device's site and line.</text>
+  <circle cx="58" cy="856" r="10" fill="#0078D4"/><text x="58" y="860" text-anchor="middle" class="n">3</text>
+  <text x="76" y="860" class="lg">The stream function receives batches (at least once), archives them, evaluates the alert rules, and records when each device was last seen.</text>
+  <circle cx="58" cy="880" r="10" fill="#8764B8"/><text x="58" y="884" text-anchor="middle" class="n">4</text>
+  <text x="76" y="884" class="lg">Archive blobs, alert history, rule state, and presence are written to Storage with the function's managed identity.</text>
+  <circle cx="58" cy="904" r="10" fill="#CA5010"/><text x="58" y="908" text-anchor="middle" class="n">5</text>
+  <text x="76" y="908" class="lg">Connection events reach the connectivity function through Event Grid; a timer raises offline and silent alerts when they are due.</text>
+  <circle cx="58" cy="928" r="10" fill="#B58900"/><text x="58" y="932" text-anchor="middle" class="n">6</text>
+  <text x="76" y="932" class="lg">Alerts are logged to Application Insights; a log alert rule emails the operator.</text>
+</svg>
