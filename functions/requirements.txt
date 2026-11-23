@@ -1,4 +1,4 @@
-azure-functions>=1.26,<2
+azure-functions>=1.26,<2; python_version < "3.13"
 azure-data-tables>=12.7,<13
 azure-storage-blob>=12.31,<13
 azure-identity>=1.27,<2
